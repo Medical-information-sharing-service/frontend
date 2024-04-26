@@ -1,4 +1,5 @@
 export interface History {
+  diagnosis: string;
   diagnosisCode: string;
   diagnosisDate: string;
   licenseNumber: string;

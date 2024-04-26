@@ -20,6 +20,8 @@ export default function Home() {
   const authContext = useAuth();
   if (!authContext) return;
 
+  const identity = authContext.loginStatus === 1 ? "patient" : "doctor";
+
   const onSignUpButtonClick = () => {
     authContext.changeModalState(1);
   };
@@ -63,7 +65,7 @@ export default function Home() {
                 explanation1={patientExplanations[healthAdvice].explanation1}
                 explanation2={patientExplanations[healthAdvice].explanation2}
                 buttonTitle="Get an Advice"
-                url="/health-advice/patient"
+                url={`/health-advice/${identity}`}
               />
               <div className="mx-2" />
               <DirectionCard

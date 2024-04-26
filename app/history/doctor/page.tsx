@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
 import Header from "@/components/Header";
 import Title from "@/components/Title";
@@ -8,6 +9,8 @@ import DiagnosisCard from "@/components/History/DiagnosisCard";
 import { History } from "@/types/History";
 
 export default function DoctorHistoryPage() {
+  const router = useRouter();
+
   const [patientId, setPatientId] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const [history, setHistory] = useState<History[]>([]);
@@ -46,14 +49,20 @@ export default function DoctorHistoryPage() {
   };
 
   const onBackClick = () => {
+    setPatientId("");
     setIsVisible(false);
+    setHistory([]);
+  };
+
+  const onAddClick = () => {
+    router.push(`/history/doctor/${patientId}`);
   };
 
   return (
     <section className="relative h-screen w-screen flex justify-center items-center">
       <Header />
       {isVisible ? (
-        <div className="">
+        <div className="w-[50%]">
           <Title title={`${patientId}’s Past Diagnoses Results`} />
           <div>
             {history.length !== 0 ? (
@@ -67,7 +76,7 @@ export default function DoctorHistoryPage() {
                       date={date}
                       licenseNumber={el.licenseNumber}
                     />
-                    <div className="my-2" />
+                    <div className="my-4" />
                   </div>
                 );
               })
@@ -77,12 +86,18 @@ export default function DoctorHistoryPage() {
               </div>
             )}
           </div>
-          <div className="flex justify-end">
+          <div className="flex justify-between mt-8">
             <div
               onClick={onBackClick}
               className="w-[120px] px-3 py-2 bg-gray-400 rounded-lg text-lg text-white text-center cursor-pointer hover:bg-gray-500 transition"
             >
               Back
+            </div>
+            <div
+              onClick={onAddClick}
+              className="w-[160px] px-3 py-2 bg-[var(--light-green)] rounded-lg text-lg text-white text-center cursor-pointer hover:bg-emerald-400 transition"
+            >
+              Add a Diagnosis
             </div>
           </div>
         </div>

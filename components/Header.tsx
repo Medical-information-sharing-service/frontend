@@ -53,6 +53,12 @@ export default function Header() {
                 Health Advice
               </Link>
               <Link
+                href={`/agree/${mode}`}
+                className="cursor-pointer text-xl mr-12"
+              >
+                Agreement
+              </Link>
+              <Link
                 href={`/history/${mode}`}
                 className="cursor-pointer text-xl mr-12"
               >

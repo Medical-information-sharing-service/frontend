@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import DiagnosisCard from "@/components/History/DiagnosisCard";
 import Title from "@/components/Title";
+import NoData from "@/components/History/NoData";
 import { useAuth } from "@/contexts/AuthContext";
 import { History } from "@/types/History";
 
@@ -43,20 +44,24 @@ export default function PatientHistoryPage() {
         <div className="w-full">
           <Title title="My Past Diagnoses Results" />
           <div>
-            {history?.map((el: History) => {
-              const date = el.diagnosisDate.split("T")[0];
-              return (
-                <div key={el._id}>
-                  <DiagnosisCard
-                    id={el._id}
-                    title={el.title}
-                    date={date}
-                    licenseNumber={el.licenseNumber}
-                  />
-                  <div className="my-4" />
-                </div>
-              );
-            })}
+            {history.length !== 0 ? (
+              history.map((el: History) => {
+                const date = el.diagnosisDate.split("T")[0];
+                return (
+                  <div key={el._id}>
+                    <DiagnosisCard
+                      id={el._id}
+                      title={el.title}
+                      date={date}
+                      licenseNumber={el.licenseNumber}
+                    />
+                    <div className="my-4" />
+                  </div>
+                );
+              })
+            ) : (
+              <NoData />
+            )}
           </div>
         </div>
       </div>
