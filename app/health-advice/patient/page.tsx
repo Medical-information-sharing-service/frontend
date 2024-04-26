@@ -6,6 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 
 export default function HealthAdvice() {
   const [mode, setMode] = useState(0);
+  const [prompt, setPrompt] = useState("");
 
   const authContext = useAuth();
   if (!authContext) return;
@@ -24,24 +25,24 @@ export default function HealthAdvice() {
     setMode(1);
   };
 
-  const onGenerateAdviceClick = () => {
-    const API_KEY = process.env.OPENAI_API_KEY;
-    const ENDPOINT = "https://api.openai.com/v1/chat/completions";
-
-    const askChatGPT = async (question: string) => {
-      try {
-        const response = await fetch(ENDPOINT, {
+  const askChatGPT = async (question: string) => {
+    try {
+      const response = await fetch(
+        "https://api.openai.com/v1/chat/completions",
+        {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${API_KEY}`,
+            Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
           },
           body: JSON.stringify({
-            model: "gpt-3.5-turbo",
+            // model: "gpt-3.5-turbo",
+            model: "text-davinci-003",
             messages: [
               {
                 role: "system",
-                content: "You are a helpful assistant.",
+                content:
+                  "You are an assistant who helps people get an advice about their health. Based on the information they provide, you tell people what is beneficial for their health.",
               },
               {
                 role: "user",
@@ -49,21 +50,23 @@ export default function HealthAdvice() {
               },
             ],
           }),
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
         }
+      );
 
-        const data = await response.json();
-        console.log("Response from GPT-3:", data.choices[0].message.content);
-      } catch (error) {
-        console.error("Error asking GPT-3:", error);
-        alert("Error occurred while getting a resoinse from AI . . .");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    };
 
-    askChatGPT("How does the solar system work?");
+      const json = await response.json();
+      console.log("Response from AI:", json.choices[0]);
+    } catch (error) {
+      console.error("Error asking AI:", error);
+      alert("Error occurred while getting a response from AI . . .");
+    }
+  };
+
+  const onGenerateAdviceClick = async () => {
+    askChatGPT("Give me a general advice about my health.");
   };
 
   return (
@@ -75,7 +78,7 @@ export default function HealthAdvice() {
           <div
             onClick={onGeneralAdviceClick}
             className={`w-[600px] h-[50px] bg-white px-4 flex justify-start items-center border-2 ${
-              mode === 0 ? "border-[var(--soft-green)]" : "border-gray-400"
+              mode === 0 ? "border-[var(--dark-green)]" : "border-gray-400"
             } rounded-lg text-xl cursor-pointer transition`}
           >
             Give me a general advice about my health.
@@ -84,7 +87,7 @@ export default function HealthAdvice() {
             onClick={onInputClick}
             type="text"
             className={`w-[600px] h-[400px] border-2 ${
-              mode === 0 ? "border-gray-400" : "border-[var(--soft-green)]"
+              mode === 0 ? "border-gray-400" : "border-[var(--dark-green)]"
             } rounded-lg px-4 flex justify-start items-center outline-none text-xl transition my-4`}
             placeholder="I want to freely ask you about my health."
           />

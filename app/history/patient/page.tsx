@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 
 import Header from "@/components/Header";
 import DiagnosisCard from "@/components/History/DiagnosisCard";
+import Title from "@/components/Title";
 import { useAuth } from "@/contexts/AuthContext";
 import { History } from "@/types/History";
 
@@ -40,12 +41,7 @@ export default function PatientHistoryPage() {
       <Header />
       <div className="w-[50%] flex flex-col justify-center items-center">
         <div className="w-full">
-          <div>
-            <div className="w-10 h-1 bg-[var(--dark-green)]" />
-            <h3 className="text-4xl font-bold mb-10">
-              My Past Diagnoses Results
-            </h3>
-          </div>
+          <Title title="My Past Diagnoses Results" />
           <div>
             {history?.map((el: History) => {
               const date = el.diagnosisDate.split("T")[0];
