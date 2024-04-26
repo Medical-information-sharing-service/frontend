@@ -14,9 +14,10 @@ export default function DiagnosisPage({ params }: { params: { id: string } }) {
   useEffect(() => {
     const func = async () => {
       const historyId = params.id;
+      const identity = authContext.loginStatus === 1 ? "patient" : "doctor";
       try {
         const res = await fetch(
-          "http://localhost:8000/history/patient/record",
+          `http://localhost:8000/history/${identity}/record`,
           {
             method: "POST",
             headers: {
